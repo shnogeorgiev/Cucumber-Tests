@@ -3,17 +3,18 @@ pipeline {
     
     environment {
         CUCUMBER_FEATURES = 'src/test/java/features'
-        CUCUMBER_GLUE = 'steps,utilities'
+        CUCUMBER_GLUE = 'src/test/java/steps,src/test/java/utilities'
     }
     
     tools {
-        maven 'Maven3'
-        jdk 'JDK22'
+        maven 'Maven 3'
+        jdk 'OpenJDK 11'
     }
 
     stages {
         stage('Checkout') {
             steps {
+                // Checkout the repository containing the tests
                 checkout scm
             }
         }
@@ -21,7 +22,15 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    bat 'mvn clean install'
+                    bat 'mvn clean verify' // Runs compile & test but skips deploy/install
+                }
+            }
+        }
+
+        stage('Run Cucumber Tests') {
+            steps {
+                script {
+                    bat 'mvn test -Dcucumber.options="--plugin json:target/cucumber.json"'
                 }
             }
         }
@@ -39,8 +48,10 @@ pipeline {
 
     post {
         always {
-            // Clean up, if needed (e.g., delete temp files)
-            cleanWs()
+            node {
+                // Clean up, if needed (e.g., delete temp files)
+                cleanWs()
+            }
         }
     }
 }
