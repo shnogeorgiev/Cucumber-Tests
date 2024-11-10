@@ -2,15 +2,18 @@ pipeline {
     agent any
     
     environment {
-        // Define the path to your feature files and step definitions
         CUCUMBER_FEATURES = 'src/test/java/features'
         CUCUMBER_GLUE = 'src/test/java/steps'
     }
     
+    tools {
+        maven 'Maven3'
+        jdk 'JDK21'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the repository containing the tests
                 checkout scm
             }
         }
@@ -18,11 +21,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    // Install the necessary dependencies (e.g., Maven or Gradle)
-                    // For Maven
                     bat 'mvn clean install'
-                    // Or for Gradle
-                    // sh './gradlew clean build'
                 }
             }
         }
@@ -30,11 +29,7 @@ pipeline {
         stage('Run Cucumber Tests') {
             steps {
                 script {
-                    // Run the Cucumber tests using Maven (or Gradle)
-                    // For Maven
                     bat 'mvn test -Dcucumber.options="--plugin json:target/cucumber-report.json"'
-                    // Or for Gradle (if you use Gradle)
-                    // sh './gradlew test --args="--plugin json:target/cucumber-report.json"'
                 }
             }
         }
