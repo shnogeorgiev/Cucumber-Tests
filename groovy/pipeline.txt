@@ -18,10 +18,10 @@ pipeline {
             }
         }
 
-        stage('Run Cucumber Tests') {
+        stage('Install Dependencies') {
             steps {
                 script {
-                    bat 'mvn test -Dcucumber.options="--plugin json:target/cucumber.json"'
+                    bat 'mvn clean verify'
                 }
             }
         }
@@ -29,7 +29,7 @@ pipeline {
         stage('Publish Cucumber Reports') {
             steps {
                 cucumber(
-                    fileIncludePattern: '**/target/cucumber.json',
+                    fileIncludePattern: '**/cucumber.json',
                     jsonReportDirectory: 'target',
                     reportTitle: 'Cucumber Test Report'
                 )
