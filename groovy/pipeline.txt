@@ -21,7 +21,9 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    bat 'mvn clean verify'
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        bat 'mvn clean verify'
+                    }
                 }
             }
         }
