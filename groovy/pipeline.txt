@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         CUCUMBER_FEATURES = 'src/test/java/features'
-        CUCUMBER_GLUE = 'steps;utilities'
+        CUCUMBER_GLUE = 'utilities;steps'
     }
     
     tools {
