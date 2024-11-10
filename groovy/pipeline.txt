@@ -26,14 +26,6 @@ pipeline {
             }
         }
 
-        stage('Run Cucumber Tests') {
-            steps {
-                script {
-                    bat 'mvn test -Dcucumber.options="--plugin json:target/cucumber.json"'
-                }
-            }
-        }
-
         stage('Publish Cucumber Reports') {
             steps {
                 cucumber(
