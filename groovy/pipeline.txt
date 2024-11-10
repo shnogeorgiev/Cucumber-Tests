@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    
+    environment {
+        // Define the path to your feature files and step definitions
+        CUCUMBER_FEATURES = 'src/test/java/features'
+        CUCUMBER_GLUE = 'src/test/java/steps'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the repository containing the tests
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install the necessary dependencies (e.g., Maven or Gradle)
+                    // For Maven
+                    sh 'mvn clean install'
+                    // Or for Gradle
+                    // sh './gradlew clean build'
+                }
+            }
+        }
+
+        stage('Run Cucumber Tests') {
+            steps {
+                script {
+                    // Run the Cucumber tests using Maven (or Gradle)
+                    // For Maven
+                    sh 'mvn test -Dcucumber.options="--plugin json:target/cucumber-report.json"'
+                    // Or for Gradle (if you use Gradle)
+                    // sh './gradlew test --args="--plugin json:target/cucumber-report.json"'
+                }
+            }
+        }
+
+        stage('Publish Cucumber Reports') {
+            steps {
+                cucumber(
+                    fileIncludePattern: '**/target/cucumber-report.json',
+                    jsonReportDirectory: 'target',
+                    reportTitle: 'Cucumber Test Report'
+                )
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up, if needed (e.g., delete temp files)
+            cleanWs()
+        }
+    }
+}
