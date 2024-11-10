@@ -47,10 +47,7 @@ pipeline {
 
     post {
         always {
-            node {
-                // Clean up, if needed (e.g., delete temp files)
-                cleanWs()
-            }
+            cleanWs()
         }
     }
 }
