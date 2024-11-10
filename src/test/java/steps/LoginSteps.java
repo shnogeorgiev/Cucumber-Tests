@@ -4,8 +4,10 @@ import components.HamburgerMenu;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
+import org.opentest4j.AssertionFailedError;
 
 import static pages.LoginPage.*;
 import static pages.ShoesPage.*;
@@ -50,5 +52,11 @@ public class LoginSteps
                 "Both Username and Password field are required",
                 login_validation()
         );
+    }
+
+    @Then("Fail Test")
+    public void fail_test()throws Throwable
+    {
+        throw new AssertionFailedError();
     }
 }

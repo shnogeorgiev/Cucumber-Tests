@@ -9,3 +9,8 @@ Feature: Login
     Given Navigate to Login Page
     When Login Credentials Empty
     Then Login Validation Error
+
+  Scenario: Explicitly Failing Test
+    Given Navigate to Login Page
+    When Login Credentials Empty
+    Then Fail Test
